@@ -1,0 +1,1242 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>個人影音作品集 — 李柏宣 × 國合會面試</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --ink: #10263b;
+        --ink-deep: #081522;
+        --teal: #3fa796;
+        --sand: #e7c57b;
+        --white: #ffffff;
+        --dark: #10263b;
+        --body: #3a4a5c;
+        --muted: rgba(255, 255, 255, 0.4);
+      }
+
+      body {
+        background: #05101c;
+        margin: 0;
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .deck-scaler {
+        transform-origin: top left;
+        position: relative;
+      }
+
+      .slide {
+        width: 1920px;
+        height: 1080px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none;
+        overflow: hidden;
+        font-family: "Inter", "Noto Sans TC", sans-serif;
+      }
+      .slide.active {
+        display: block;
+      }
+
+      @media print {
+        @page {
+          size: 1920px 1080px;
+          margin: 0;
+        }
+        html,
+        body {
+          width: 1920px;
+          height: auto;
+          overflow: visible;
+        }
+        .deck-scaler {
+          position: static !important;
+          transform: none !important;
+        }
+        .slide {
+          display: block !important;
+          position: relative !important;
+          break-after: page;
+          page-break-after: always;
+        }
+        .slide:last-of-type {
+          break-after: auto;
+          page-break-after: auto;
+        }
+        #hud,
+        #fs-btn {
+          display: none !important;
+        }
+      }
+
+      .geo {
+        position: absolute;
+        pointer-events: none;
+      }
+
+      /* ── COVER ── */
+      .slide.cover {
+        background: linear-gradient(
+          150deg,
+          var(--ink) 0%,
+          var(--ink-deep) 100%
+        );
+      }
+      .slide.cover .teal-block {
+        width: 560px;
+        height: 380px;
+        background: var(--teal);
+        border-radius: 44px;
+        top: -90px;
+        right: -110px;
+        transform: rotate(-18deg);
+        opacity: 0.9;
+      }
+      .slide.cover .sand-pill-a {
+        width: 72px;
+        height: 220px;
+        background: var(--sand);
+        border-radius: 50px;
+        right: 260px;
+        top: 280px;
+        transform: rotate(-10deg);
+      }
+      .slide.cover .sand-pill-b {
+        width: 112px;
+        height: 72px;
+        background: var(--sand);
+        border-radius: 50px;
+        right: 160px;
+        top: 560px;
+      }
+      .slide.cover .teal-corner {
+        width: 180px;
+        height: 160px;
+        background: var(--teal);
+        border-radius: 24px;
+        bottom: -50px;
+        left: -40px;
+        transform: rotate(-30deg);
+        opacity: 0.5;
+      }
+      .cover-eyebrow {
+        position: absolute;
+        top: 92px;
+        left: 96px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--sand);
+      }
+      .cover-content {
+        position: absolute;
+        bottom: 220px;
+        left: 96px;
+        right: 480px;
+      }
+      .cover-title {
+        font-size: 88px;
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1.2;
+        margin-bottom: 28px;
+        letter-spacing: -1px;
+      }
+      .cover-sub {
+        font-size: 38px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 1.5;
+      }
+      .presenter {
+        position: absolute;
+        bottom: 100px;
+        left: 96px;
+        font-size: 26px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+      .presenter-bar {
+        display: inline-block;
+        width: 3px;
+        height: 20px;
+        background: var(--sand);
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+      /* ── CONTENT (white) ── */
+      .slide.content {
+        background: var(--white);
+      }
+      .slide.content .teal-corner-sm {
+        width: 88px;
+        height: 88px;
+        background: var(--teal);
+        border-radius: 0 0 28px 0;
+        top: 0;
+        left: 0;
+      }
+      .slide.content .sand-pill-br {
+        width: 164px;
+        height: 88px;
+        background: var(--sand);
+        border-radius: 50px;
+        bottom: 68px;
+        right: 72px;
+        opacity: 0.6;
+      }
+      .content-header {
+        position: absolute;
+        top: 76px;
+        left: 96px;
+        right: 96px;
+        padding-left: 28px;
+        border-left: 6px solid var(--teal);
+      }
+      .content-eyebrow {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: var(--teal);
+        margin-bottom: 8px;
+      }
+      .content-title {
+        font-size: 58px;
+        font-weight: 700;
+        color: var(--dark);
+        line-height: 1.2;
+        letter-spacing: -0.5px;
+      }
+
+      .content-body {
+        position: absolute;
+        top: 216px;
+        left: 96px;
+        right: 96px;
+        bottom: 96px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .content-body p {
+        font-size: 30px;
+        color: var(--body);
+        line-height: 1.6;
+        margin-bottom: 22px;
+      }
+      .content-body ul {
+        list-style: none;
+        padding: 0;
+      }
+      .content-body ul li {
+        font-size: 30px;
+        color: var(--body);
+        line-height: 1.5;
+        margin-bottom: 18px;
+        padding-left: 36px;
+        position: relative;
+      }
+      .content-body ul li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 12px;
+        width: 14px;
+        height: 14px;
+        background: var(--teal);
+        border-radius: 50%;
+      }
+      .content-body ul li b {
+        color: var(--dark);
+      }
+
+      /* 兩欄：左文字 右影片卡 */
+      .split {
+        display: grid;
+        grid-template-columns: 1fr 640px;
+        gap: 64px;
+        height: 100%;
+        align-items: center;
+      }
+      .split-stats {
+        display: flex;
+        gap: 32px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+      }
+      .stat-box {
+        background: #f2f6f5;
+        border-left: 4px solid var(--teal);
+        padding: 18px 24px;
+      }
+      .stat-num {
+        font-size: 40px;
+        font-weight: 800;
+        color: var(--dark);
+        line-height: 1.1;
+      }
+      .stat-label {
+        font-size: 20px;
+        color: var(--body);
+        margin-top: 4px;
+      }
+      .tag-row {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 18px;
+      }
+      .tag {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--white);
+        background: var(--ink);
+        padding: 6px 16px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+      }
+
+      /* ── 職缺對應（分類雙欄）── */
+      .job-map {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 48px;
+      }
+      .job-card {
+        display: flex;
+        flex-direction: column;
+      }
+      .job-tag {
+        display: inline-block;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--white);
+        background: var(--ink);
+        padding: 6px 18px;
+        border-radius: 20px;
+        letter-spacing: 1px;
+        margin-bottom: 16px;
+        align-self: flex-start;
+      }
+      .job-official {
+        background: #f2f6f5;
+        border-left: 4px solid var(--teal);
+        padding: 18px 22px;
+        margin-bottom: 20px;
+        min-height: 168px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+      }
+      .job-official-label {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--teal);
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+      }
+      .job-official p {
+        font-size: 22px;
+        color: var(--dark);
+        line-height: 1.5;
+        margin: 0;
+      }
+      .job-arrow {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--sand);
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+      }
+      .job-match {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .job-match li {
+        font-size: 24px;
+        color: var(--body);
+        line-height: 1.5;
+        margin-bottom: 14px;
+        padding-left: 30px;
+        position: relative;
+      }
+      .job-match li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 10px;
+        width: 12px;
+        height: 12px;
+        background: var(--teal);
+        border-radius: 50%;
+      }
+      .job-match li b {
+        color: var(--dark);
+      }
+
+      /* ── About Me 兩大優勢 ── */
+      .pillar-intro {
+        font-size: 28px;
+        color: var(--body);
+        margin-bottom: 28px;
+      }
+      .pillar-map {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 40px;
+      }
+      .pillar-card {
+        background: #f2f6f5;
+        border-radius: 20px;
+        padding: 34px 32px;
+        box-sizing: border-box;
+      }
+      .pillar-num {
+        font-size: 18px;
+        font-weight: 800;
+        color: var(--teal);
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+      }
+      .pillar-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--dark);
+        line-height: 1.35;
+        margin-bottom: 18px;
+      }
+      .pillar-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .pillar-card ul li {
+        font-size: 21px;
+        color: var(--body);
+        line-height: 1.5;
+        margin-bottom: 12px;
+        padding-left: 26px;
+        position: relative;
+      }
+      .pillar-card ul li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        width: 10px;
+        height: 10px;
+        background: var(--teal);
+        border-radius: 50%;
+      }
+      .pillar-card ul li b {
+        color: var(--dark);
+      }
+
+      /* ── 影片卡（縮圖＋外連） ── */
+      .video-card {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        border-radius: 20px;
+        overflow: hidden;
+        background: linear-gradient(
+          150deg,
+          var(--ink) 0%,
+          var(--ink-deep) 100%
+        );
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+      .video-card .geo-a {
+        width: 220px;
+        height: 220px;
+        background: var(--teal);
+        opacity: 0.35;
+        border-radius: 50%;
+        top: -60px;
+        right: -60px;
+      }
+      .video-card .geo-b {
+        width: 140px;
+        height: 140px;
+        background: var(--sand);
+        opacity: 0.25;
+        border-radius: 30px;
+        bottom: -30px;
+        left: -30px;
+        transform: rotate(20deg);
+      }
+      .play-btn {
+        width: 108px;
+        height: 108px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.14);
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2;
+        transition: background 0.2s;
+      }
+      .video-card:hover .play-btn {
+        background: var(--sand);
+        border-color: var(--sand);
+      }
+      .play-btn svg {
+        width: 40px;
+        height: 40px;
+        margin-left: 6px;
+      }
+      .video-card-label {
+        position: absolute;
+        bottom: 24px;
+        left: 28px;
+        right: 28px;
+        z-index: 2;
+        color: rgba(255, 255, 255, 0.85);
+        font-size: 20px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .video-card-label .src {
+        color: rgba(255, 255, 255, 0.5);
+        font-size: 16px;
+        font-weight: 400;
+      }
+
+      .video-embed {
+        width: 100%;
+        height: 400px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+      }
+      .video-embed iframe {
+        width: 100%;
+        height: 100%;
+        border: 0;
+      }
+
+      /* 三格影片卡（UD 案） */
+      .video-trio {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 28px;
+        height: 100%;
+      }
+      .video-trio .video-card {
+        height: 100%;
+      }
+      .video-trio .play-btn {
+        width: 84px;
+        height: 84px;
+      }
+      .video-trio .play-btn svg {
+        width: 30px;
+        height: 30px;
+      }
+
+      /* ── SECTION ── */
+      .slide.section {
+        background: linear-gradient(
+          150deg,
+          var(--ink) 0%,
+          var(--ink-deep) 100%
+        );
+      }
+      .slide.section .teal-block-sm {
+        width: 320px;
+        height: 240px;
+        background: var(--teal);
+        border-radius: 32px;
+        top: -60px;
+        right: -60px;
+        transform: rotate(-18deg);
+        opacity: 0.85;
+      }
+      .slide.section .sand-pill-a {
+        width: 64px;
+        height: 180px;
+        background: var(--sand);
+        border-radius: 50px;
+        right: 200px;
+        top: 200px;
+        transform: rotate(-10deg);
+      }
+      .section-content {
+        position: absolute;
+        top: 50%;
+        left: 96px;
+        transform: translateY(-50%);
+      }
+      .section-num {
+        display: block;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--sand);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+      }
+      .section-title {
+        font-size: 76px;
+        font-weight: 800;
+        color: var(--white);
+        line-height: 1.2;
+        letter-spacing: -1px;
+        margin-bottom: 24px;
+      }
+      .section-desc {
+        font-size: 34px;
+        color: rgba(255, 255, 255, 0.65);
+        line-height: 1.6;
+        max-width: 1100px;
+      }
+
+      /* ── CLOSING（聖露西亞照片）── */
+      .slide.closing {
+        background: var(--ink-deep);
+      }
+      .closing-bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .closing-scrim {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          rgba(8, 21, 34, 0.15) 0%,
+          rgba(8, 21, 34, 0.35) 55%,
+          rgba(8, 21, 34, 0.88) 100%
+        );
+      }
+      .closing-content {
+        position: absolute;
+        bottom: 120px;
+        left: 96px;
+        right: 96px;
+        z-index: 2;
+      }
+      .closing-eyebrow {
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        color: var(--sand);
+        margin-bottom: 20px;
+      }
+      .closing-title {
+        font-size: 76px;
+        font-weight: 800;
+        color: var(--white);
+        letter-spacing: -1px;
+        margin-bottom: 16px;
+      }
+      .closing-sub {
+        font-size: 32px;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 1200px;
+        line-height: 1.5;
+      }
+      .closing-signature {
+        font-size: 22px;
+        color: rgba(255, 255, 255, 0.5);
+        margin-top: 24px;
+      }
+
+      /* ── Footer ── */
+      .footer {
+        position: absolute;
+        bottom: 30px;
+        left: 72px;
+        right: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .footer-label {
+        font-size: 20px;
+        color: var(--muted);
+      }
+      .footer-num {
+        font-size: 20px;
+        color: var(--muted);
+      }
+      .slide.content .footer {
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        padding-top: 8px;
+      }
+      .slide.content .footer-label,
+      .slide.content .footer-num {
+        color: rgba(0, 0, 0, 0.3);
+      }
+
+      #hud {
+        position: fixed;
+        bottom: 16px;
+        right: 24px;
+        font-family: "Inter", sans-serif;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.25);
+        pointer-events: none;
+        z-index: 100;
+      }
+      #fs-btn {
+        position: fixed;
+        bottom: 14px;
+        right: 70px;
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: rgba(255, 255, 255, 0.55);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 100;
+        transition:
+          background 0.15s,
+          color 0.15s;
+      }
+      #fs-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+        color: #fff;
+      }
+      #fs-btn svg {
+        width: 18px;
+        height: 18px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="deck-scaler" id="deck">
+      <!-- 1. 封面 -->
+      <div class="slide cover active">
+        <div class="geo teal-block"></div>
+        <div class="geo sand-pill-a"></div>
+        <div class="geo sand-pill-b"></div>
+        <div class="geo teal-corner"></div>
+        <div class="cover-eyebrow">國合會 115 年度海外服務工作團 面試簡報</div>
+        <div class="cover-content">
+          <div class="cover-title">個人影音作品集</div>
+          <div class="cover-sub">
+            聖露西亞計畫 #5 多媒體 ／ #6 數位教材及教學影像製作
+          </div>
+        </div>
+        <div class="presenter">
+          <span class="presenter-bar"></span>李柏宣　專案志工申請人
+        </div>
+      </div>
+
+      <!-- 2. 關於我 -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="geo sand-pill-br"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">About Me</div>
+          <div class="content-title">兩個核心優勢</div>
+        </div>
+        <div class="content-body">
+          <p class="pillar-intro">
+            商業開發背景 × 內容製作實戰，八年橫跨台港的兩個核心優勢：
+          </p>
+          <div class="pillar-map">
+            <div class="pillar-card">
+              <div class="pillar-num">優勢 1</div>
+              <div class="pillar-title">把複雜概念轉譯成一般人聽得懂的資訊</div>
+              <ul>
+                <li>
+                  CSP Dashboard：自行開發的自動化工具，教到<b
+                    >完全不懂程式的同事一鍵就能用</b
+                  >
+                </li>
+                <li>
+                  家教教學法：用邏輯框架取代死背，學生成績提升
+                  <b>10-20 分</b>，且成功跨教育體系複製
+                </li>
+              </ul>
+            </div>
+            <div class="pillar-card">
+              <div class="pillar-num">優勢 2</div>
+              <div class="pillar-title">
+                影片是能被算出商業利益的工具，不只是流量
+              </div>
+              <ul>
+                <li>
+                  零成本短片促成客戶<b>加購 4 台新車</b>，貢獻港幣
+                  <b>60 萬</b>毛利
+                </li>
+                <li>
+                  用實績談判取得原廠 <b>1 萬美金</b>拍攝資源，3
+                  支影片全數破萬觀看
+                </li>
+                <li>
+                  累計超過 <b>10 萬觀看</b>，且每一支都能追溯到具體商業結果
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">2</div>
+        </div>
+      </div>
+
+      <!-- 3. 章節：分類一 -->
+      <div class="slide section">
+        <div class="geo teal-block-sm"></div>
+        <div class="geo sand-pill-a"></div>
+        <div class="section-content">
+          <span class="section-num">分類一</span>
+          <div class="section-title">個人親自拍攝剪輯</div>
+          <div class="section-desc">
+            獨立完成企劃、拍攝、剪輯全流程，累積超過 10 萬觀看
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. 案例1 Front Frame Extension -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">案例 1 · 2026</div>
+          <div class="content-title">Front Frame Extension</div>
+        </div>
+        <div class="content-body">
+          <div class="split">
+            <div>
+              <div class="tag-row"><span class="tag">全案例最快紀錄</span></div>
+              <p>配合公司目標推廣 Lorry Crane 產品，非常適合香港使用情境。</p>
+              <div class="split-stats">
+                <div class="stat-box">
+                  <div class="stat-num">8.8萬</div>
+                  <div class="stat-label">累計觀看數</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-num">3天1.4萬</div>
+                  <div class="stat-label">上線速度</div>
+                </div>
+              </div>
+              <p>
+                商業價值：影片上架後該車直接售出，客戶已於 2026 年 6 月 30
+                日交車 —— 從內容曝光到成交一次到位。
+              </p>
+            </div>
+            <a
+              class="video-card"
+              href="https://www.facebook.com/share/r/19YVP7CLgv/"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 點我播放原片</span
+                ><span class="src">Facebook Reels ↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">4</div>
+        </div>
+      </div>
+
+      <!-- 5. 案例2 國榮蘇豪交車 -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">案例 2 · 2025</div>
+          <div class="content-title">國榮 蘇豪交車</div>
+        </div>
+        <div class="content-body">
+          <div class="split">
+            <div>
+              <div class="tag-row"><span class="tag">零成本商業轉換</span></div>
+              <p>
+                與客戶商量後，在交車典禮現場即時拍攝剪輯一支 30
+                秒短片，全程手機拍攝＋剪輯，快速驗證「影片行銷是否可行」。
+              </p>
+              <div class="split-stats">
+                <div class="stat-box">
+                  <div class="stat-num">1萬+</div>
+                  <div class="stat-label">觀看數／破百讚</div>
+                </div>
+                <div class="stat-box">
+                  <div class="stat-num">60萬</div>
+                  <div class="stat-label">港幣毛利貢獻</div>
+                </div>
+              </div>
+              <p>
+                影片上架後被另一位客戶看到，主動洽詢並加購
+                <b>4 台新車</b>，拍攝成本卻是零 —— 這段客戶關係也直接促成了後續
+                UD 原廠合作案。
+              </p>
+            </div>
+            <a
+              class="video-card"
+              href="https://www.facebook.com/share/r/195V3JbU2i/"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 點我播放原片</span
+                ><span class="src">Facebook Reels ↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">5</div>
+        </div>
+      </div>
+
+      <!-- 6. 案例3 成豐交車 -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">案例 3 · 2025</div>
+          <div class="content-title">成豐交車</div>
+        </div>
+        <div class="content-body">
+          <div class="split">
+            <div>
+              <div class="tag-row">
+                <span class="tag">全香港最高吊臂車</span>
+              </div>
+              <p>
+                交付產品為 75
+                米升降台車，是全香港最高。客戶為此舉辦交車典禮，負責典禮現場拍攝與剪輯。
+              </p>
+              <div class="split-stats">
+                <div class="stat-box">
+                  <div class="stat-num">4千+</div>
+                  <div class="stat-label">觀看數</div>
+                </div>
+              </div>
+              <p>商業價值：深化客戶關係，並確立了公司未來的短影音行銷模式。</p>
+            </div>
+            <a
+              class="video-card"
+              href="https://www.facebook.com/share/r/1E9mNiduMB/"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 點我播放原片</span
+                ><span class="src">Facebook Reels ↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">6</div>
+        </div>
+      </div>
+
+      <!-- 7. 章節：分類二 -->
+      <div class="slide section">
+        <div class="geo teal-block-sm"></div>
+        <div class="geo sand-pill-a"></div>
+        <div class="section-content">
+          <span class="section-num">分類二</span>
+          <div class="section-title">主導企劃執行</div>
+          <div class="section-desc">
+            跨部門與對外談判 —— 從需求談判、資源調度到專案交付全程主導
+          </div>
+        </div>
+      </div>
+
+      <!-- 8. UD 合作專案 -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">主導企劃案例 · 2026</div>
+          <div class="content-title">Chi Shing, Sze Wai, UD 合作專案</div>
+        </div>
+        <div class="content-body">
+          <p style="margin-bottom: 16px">
+            國榮蘇豪案的成效被推播給另一位長期合作客戶，我主動與原廠談判爭取
+            <b>1 萬美金</b
+            >拍攝補助，找到合作客戶、與攝影師討論腳本、現場統籌執行 —— 產出 3
+            支影片，<b>每支觀看數均超過 1 萬</b>。為全部市場最高效益。
+          </p>
+          <div class="video-trio">
+            <a
+              class="video-card"
+              href="https://www.youtube.com/watch?v=vFT16ZLf1U8"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 播放</span><span class="src">YouTube ↗</span>
+              </div>
+            </a>
+            <a
+              class="video-card"
+              href="https://www.facebook.com/share/v/1BgvWnhBFt/"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 播放</span><span class="src">Facebook ↗</span>
+              </div>
+            </a>
+            <a
+              class="video-card"
+              href="https://www.facebook.com/share/v/1dPsV21HoV/"
+              target="_blank"
+              rel="noopener"
+            >
+              <div class="geo geo-a"></div>
+              <div class="geo geo-b"></div>
+              <div class="play-btn">
+                <svg viewBox="0 0 24 24" fill="white">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+              </div>
+              <div class="video-card-label">
+                <span>▶ 播放</span><span class="src">Facebook ↗</span>
+              </div>
+            </a>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">8</div>
+        </div>
+      </div>
+
+      <!-- 9. 為什麼帶到聖露西亞 -->
+      <div class="slide content">
+        <div class="geo teal-corner-sm"></div>
+        <div class="content-header">
+          <div class="content-eyebrow">Why Saint Lucia</div>
+          <div class="content-title">對應兩項職缺的實際工作內容</div>
+        </div>
+        <div class="content-body">
+          <div class="job-map">
+            <div class="job-card">
+              <span class="job-tag">#5 多媒體</span>
+              <div class="job-official">
+                <div class="job-official-label">簡章服務內容</div>
+                <p>
+                  協助共同經營社區組織社群平台；拍攝社區推廣、旅遊行銷短影音；剪輯為適合
+                  IG / YouTube 的影片
+                </p>
+              </div>
+              <div class="job-arrow">→ 我的對應經驗</div>
+              <ul class="job-match">
+                <li>
+                  三支交車短影音案例，從企劃、拍攝到剪輯<b>獨立完成全流程</b>
+                </li>
+                <li>
+                  手機拍攝＋AI 剪輯，<b>零成本</b>驗證內容能否帶動實際成效
+                </li>
+                <li>熟悉將素材剪成社群平台適用格式，持續操作超過一年</li>
+              </ul>
+            </div>
+            <div class="job-card">
+              <span class="job-tag">#6 數位教材及教學影像製作</span>
+              <div class="job-official">
+                <div class="job-official-label">簡章服務內容</div>
+                <p>
+                  協助對民眾或公務員進行資訊教育訓練；指導露國政府錄製數位課程及教材製作
+                </p>
+              </div>
+              <div class="job-arrow">→ 我的對應經驗</div>
+              <ul class="job-match">
+                <li>
+                  CSP Dashboard 專案：把自動化工具教到<b
+                    >完全不懂程式的同事一鍵就能用</b
+                  >
+                </li>
+                <li>
+                  家教教學法：同一套教學邏輯成功複製到<b
+                    >不同教育體系、不同學生背景</b
+                  >
+                </li>
+                <li>兩者都證明我能把複雜的東西轉譯成別人學得會的形式</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="footer">
+          <div class="footer-label">李柏宣 × 國合會面試作品集</div>
+          <div class="footer-num">9</div>
+        </div>
+      </div>
+
+      <!-- 10. 結尾 -->
+      <div class="slide closing">
+        <img
+          class="closing-bg"
+          src="assets/saint-lucia-pitons.jpeg"
+          alt="Saint Lucia Pitons"
+        />
+        <div class="closing-scrim"></div>
+        <div class="closing-content">
+          <div class="closing-title">
+            把國合會的資源，變成聖露西亞用得上的能力
+          </div>
+          <div class="closing-sub">
+            Taiwan can
+            help、讓聖露西亞有實質收穫——也是我想留給自己的一段難忘旅程
+          </div>
+          <div class="closing-signature">
+            李柏宣　國合會 115 年度海外服務工作團　專案志工申請人
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="hud"><span id="hud-cur">1</span> / <span id="hud-tot"></span></div>
+    <button id="fs-btn" title="全螢幕播放">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path
+          d="M8 3H5a2 2 0 0 0-2 2v3M16 3h3a2 2 0 0 1 2 2v3M8 21H5a2 2 0 0 1-2-2v-3M16 21h3a2 2 0 0 0 2-2v-3"
+        ></path>
+      </svg>
+    </button>
+    <script>
+      (function () {
+        function scale() {
+          const s = Math.min(
+            window.innerWidth / 1920,
+            window.innerHeight / 1080,
+          );
+          const deck = document.getElementById("deck");
+          deck.style.transform = `scale(${s})`;
+          deck.style.width = "1920px";
+          deck.style.height = "1080px";
+          deck.style.position = "fixed";
+          deck.style.left = (window.innerWidth - 1920 * s) / 2 + "px";
+          deck.style.top = (window.innerHeight - 1080 * s) / 2 + "px";
+        }
+        scale();
+        window.addEventListener("resize", scale);
+
+        const slides = document.querySelectorAll(".slide");
+        let cur = 0;
+        const hudCur = document.getElementById("hud-cur");
+        const hudTot = document.getElementById("hud-tot");
+        hudTot.textContent = slides.length;
+
+        function show(n) {
+          slides[cur].classList.remove("active");
+          cur = ((n % slides.length) + slides.length) % slides.length;
+          slides[cur].classList.add("active");
+          hudCur.textContent = cur + 1;
+        }
+        slides[0].classList.add("active");
+
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
+            e.preventDefault();
+            show(cur + 1);
+          }
+          if (e.key === "ArrowLeft" || e.key === "PageUp") {
+            e.preventDefault();
+            show(cur - 1);
+          }
+          if (e.key === "Home") show(0);
+          if (e.key === "End") show(slides.length - 1);
+        });
+
+        document.getElementById("deck").addEventListener("click", function (e) {
+          if (e.target.closest("a.video-card")) return;
+          if (e.clientX > window.innerWidth / 2) show(cur + 1);
+          else show(cur - 1);
+        });
+
+        document
+          .getElementById("fs-btn")
+          .addEventListener("click", function (e) {
+            e.stopPropagation();
+            if (!document.fullscreenElement)
+              document.documentElement.requestFullscreen();
+            else document.exitFullscreen();
+          });
+      })();
+    </script>
+  </body>
+</html>
